@@ -5,127 +5,77 @@ class Solution
 public:
     double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
     {
-    int length_sum= nums1.size() +nums2.size();
-    int index_nums1 = 0;
-    int index_nums2 = 0;
-    int state = 1;
-    if(length_sum%2==1){
-        int mid_number = (length_sum / 2) +1;
-        while(index_nums1+index_nums2+2==mid_number){
-            if(index_nums1+1==nums1.size()){
-                index_nums2++;
-                state = 2;
-            }
-            if(index_nums2+1==nums2.size()){
-                index_nums1++;
-                state = 1;
-            }
-            if(index_nums2+1!=nums2.size()&&index_nums1+1==nums1.size()){
-                if(nums1[index_nums1]<nums2[index_nums2]){
-                    index_nums1++;
-                    state = 1;
-                }
-                else{
-                    index_nums2++;
-                    state = 2;
-                }
-            }
-        }
-        if(state==1){
-            return nums1[index_nums1];
-        }
-        else{
-            return nums2[index_nums2];
-        }
-    }
-    else{
-        int mid_number1 = length_sum / 2;
-        int mid_number2 = (length_sum / 2) + 1;
-        int state = 1;
-        while (index_nums1 + index_nums2 + 2 == mid_number1)
+        if (nums1.size() > nums2.size())
         {
-            if (index_nums1 + 1 == nums1.size())
-            {
-                index_nums2++;
-                state = 2;
-            }
-            if (index_nums2 + 1 == nums2.size())
-            {
-                index_nums1++;
-                state = 1;
-            }
-            if (index_nums2 + 1 != nums2.size() && index_nums1 + 1 == nums1.size())
-            {
-                if (nums1[index_nums1] < nums2[index_nums2])
-                {
-                    index_nums1++;
-                    state = 1;
-                }
-                else
-                {
-                    index_nums2++;
-                    state = 2;
-                }
-            }
+            return findMedianSortedArrays(nums2, nums1);
         }
+        int state = 0;
+        int mid;
         int mid1;
-        if (state == 1)
-        {
-            mid1 = nums1[index_nums1];
-        }
-        else
-        {
-            mid1 = nums2[index_nums2];
+        int mid2;
+
+        if((nums1.size()+nums2.size())%2==1){
+            state = 1;
+            mid = (nums1.size() + nums2.size()) / 2 ;
         }
 
-        if (index_nums1 + 1 == nums1.size())
-        {
-            index_nums2++;
+        else{
             state = 2;
+            mid1 = (nums1.size() + nums2.size()) / 2-1;
+            mid2 = mid1 +1 ;
         }
-        if (index_nums2 + 1 == nums2.size())
-        {
-            index_nums1++;
-            state = 1;
-        }
-        if (index_nums2 + 1 != nums2.size() && index_nums1 + 1 == nums1.size())
-        {
-            if (nums1[index_nums1] < nums2[index_nums2])
+        
+
+        int left_max;
+        int right_min;
+        int index_left2 ;
+        int index_left1;
+        int index_right1;
+        int index_right2;
+        
+        
+        index_left1= (nums1.size()-1)/2 ;
+        index_left2 = mid-index_left1-1;
+        index_right1=index_left1+1;
+        index_right2=index_left2+1;
+        
+    
+        while(true){
+
+
+            if (nums1[index_left1] > nums2[index_left2])
             {
-                index_nums1++;
-                state = 1;
+                left_max = nums1[index_left1];
+            }
+            else{
+                left_max = nums2[index_left2];
+            }
+
+            if (nums1[index_right1] > nums2[index_right2])
+            {
+                right_min = nums2[index_right2];
             }
             else
             {
-                index_nums2++;
-                state = 2;
+                right_min = nums1[index_right1];
             }
-        }
-        int mid2;
-        if (index_nums1 + 1 == nums1.size())
-        {
-            index_nums2++;
-            state = 2;
-        }
-        if (index_nums2 + 1 == nums2.size())
-        {
-            index_nums1++;
-            state = 1;
-        }
-        if (index_nums2 + 1 != nums2.size() && index_nums1 + 1 == nums1.size())
-        {
-            if (nums1[index_nums1] < nums2[index_nums2])
-            {
-                index_nums1++;
-                state = 1;
+
+            if(left_max<=right_min){
+                break;
             }
-            else
-            {
-                index_nums2++;
-                state = 2;
+            else{
+                if (nums1[index_left1] > nums2[index_left2])
+                {
+                    
+                    index_left1=index_left1-1;
+                    index_left2 = mid - index_left1 - 1;
+                    index_right1 = index_left1 + 1;
+                    index_right2 = index_left2 + 1;
+                }
+
             }
+
+
         }
-        return mid1 + mid2;
-    }
     }
 };
